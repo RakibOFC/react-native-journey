@@ -1,22 +1,20 @@
-// src/screens/LoginScreen.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
+  Text, TextInput, StyleSheet, Image,
+  TouchableOpacity, ScrollView, KeyboardAvoidingView,
+  Platform, Alert
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUser } from '../db/Database';
+import { initDB } from '../db/Database';
 
 const LoginScreen = ({ navigation }: any) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    initDB(); // ensure DB is ready
+  }, []);
 
   const onLogin = async () => {
     if (!username || !password) {
@@ -24,23 +22,18 @@ const LoginScreen = ({ navigation }: any) => {
       return;
     }
 
-    const user = await getUser(username, password); // simulate db
-    if (user) {
-      await AsyncStorage.setItem('is_logged_in', 'true');
-      await AsyncStorage.setItem('user_id', user.id.toString());
-
-      navigation.replace('Dashboard'); // or set state if no navigator
-    } else {
-      Alert.alert('Login Failed', 'Invalid username or password.');
+    try {
+      const user = await getUser(username, password);
+      if (user) {
+        await AsyncStorage.setItem('is_logged_in', 'true');
+        await AsyncStorage.setItem('user_id', user.id.toString());
+        navigation.replace('Dashboard');
+      } else {
+        Alert.alert('Login Failed', 'Invalid username or password.');
+      }
+    } catch (e) {
+      Alert.alert('Error', 'Something went wrong!');
     }
-  };
-
-  const getUser = async (username: string, password: string) => {
-    // Fake DB check — replace with real SQLite or DB logic
-    if (username === 'test' && password === '1234') {
-      return { id: 1, username };
-    }
-    return null;
   };
 
   return (
@@ -71,7 +64,7 @@ const LoginScreen = ({ navigation }: any) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('Registration')}
+          onPress={() => navigation.navigate('RegistrationScreen')}
           style={styles.registerLink}
         >
           <Text style={styles.registerText}>
