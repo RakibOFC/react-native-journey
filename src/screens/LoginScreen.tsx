@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text, TextInput, StyleSheet, Image,
-  TouchableOpacity, ScrollView, KeyboardAvoidingView,
-  Platform, Alert
-} from 'react-native';
+import {Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from '../db/Database';
 import { initDB } from '../db/Database';
@@ -13,7 +9,7 @@ const LoginScreen = ({ navigation }: any) => {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    initDB(); // ensure DB is ready
+    initDB();
   }, []);
 
   const onLogin = async () => {
