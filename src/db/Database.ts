@@ -2,18 +2,26 @@ import SQLite from 'react-native-sqlite-storage';
 
 SQLite.enablePromise(true);
 
-const db = await SQLite.openDatabase({ name: 'app.db', location: 'default' });
+let db: SQLite.SQLiteDatabase;
+
+export const getDB = async (): Promise<SQLite.SQLiteDatabase> => {
+  if (!db) {
+    db = await SQLite.openDatabase({ name: 'app.db', location: 'default' });
+  }
+  return db;
+};
 
 export const initDB = async () => {
-  await db.executeSql(
-    `CREATE TABLE IF NOT EXISTS users (
+  const database = await getDB();
+  await database.executeSql(`
+    CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       username TEXT UNIQUE,
       password TEXT,
       phone TEXT
-    );`
-  );
+    );
+  `);
 };
 
 export const insertUser = async (
@@ -22,23 +30,26 @@ export const insertUser = async (
   password: string,
   phone: string
 ) => {
-  return db.executeSql(
+  const database = await getDB();
+  return database.executeSql(
     `INSERT INTO users (name, username, password, phone) VALUES (?, ?, ?, ?)`,
     [name, username, password, phone]
   );
 };
 
 export const getUserByUsername = async (username: string) => {
-  const results = await db.executeSql(
+  const database = await getDB();
+  const results = await database.executeSql(
     `SELECT * FROM users WHERE username = ?`,
     [username]
   );
   return results[0].rows.length ? results[0].rows.item(0) : null;
 };
 
-export const getUser = (username: string, password: string): Promise<any> => {
+export const getUser = async (username: string, password: string): Promise<any> => {
+  const database = await getDB();
   return new Promise((resolve, reject) => {
-    db.transaction(tx => {
+    database.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM users WHERE username = ? AND password = ?',
         [username, password],
