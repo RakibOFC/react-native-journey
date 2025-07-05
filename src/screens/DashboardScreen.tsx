@@ -1,20 +1,33 @@
 import React from 'react';
-import { View, ActivityIndicator, StatusBar, Text, StyleSheet, TouchableOpacity, } from 'react-native';
+import { View, StatusBar, Alert, Text, StyleSheet, TouchableOpacity, } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DashboardScreen = () => (
-  <View style={styles.container}>
-    <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-    <Text style={styles.text}>Welcome to Dashboard!</Text>
-    
-    <TouchableOpacity
-      style={styles.logoutButton}
-      onPress={() => console.log('Button Pressed')}
-    >
-      <Text style={{ color: '#ffffff', fontWeight: 'bold' }}>Logout</Text>
-    </TouchableOpacity>
+const DashboardScreen = ({ navigation }: any) => {
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('is_logged_in');
+      await AsyncStorage.removeItem('user_id');
+      navigation.replace('Login');
+    } catch (error) {
+      Alert.alert('Logout Failed', 'An error occurred while logging out.');
+    }
+  };
 
-  </View>
-);
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <Text style={styles.text}>Welcome to Dashboard!</Text>
+
+      <TouchableOpacity
+        style={styles.logoutButton}
+        onPress={handleLogout}
+      >
+        <Text style={{ color: '#ffffff', fontWeight: 'bold' }}>Logout</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+};
 
 export default DashboardScreen;
 
