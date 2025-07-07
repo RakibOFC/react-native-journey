@@ -68,3 +68,17 @@ export const getUser = async (username: string, password: string): Promise<any> 
     });
   });
 };
+
+export const getUserById = async (id: number): Promise<any | null> => {
+  const database = await getDB();
+  const results = await database.executeSql(
+    `SELECT * FROM users WHERE id = ?`,
+    [id]
+  );
+
+  if (results.length > 0 && results[0].rows.length > 0) {
+    return results[0].rows.item(0);
+  }
+
+  return null;
+};
