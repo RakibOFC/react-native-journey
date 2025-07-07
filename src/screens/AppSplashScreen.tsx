@@ -5,6 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { Routes } from '../constants/routes';
 
 type AppSplashNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
@@ -16,7 +17,7 @@ const AppSplashScreen = () => {
       SplashScreen.hide();
       await new Promise(res => setTimeout(res, 2000));
       const loggedIn = await AsyncStorage.getItem('is_logged_in');
-      navigation.replace(loggedIn === 'true' ? 'Dashboard' : 'Login');
+      navigation.replace(loggedIn === 'true' ? Routes.Dashboard : Routes.Login);
     };
 
     init();

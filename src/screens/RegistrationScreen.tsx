@@ -59,18 +59,21 @@ const RegistrationScreen = ({ navigation }: any) => {
         />
         <TextInput
           placeholder="Name"
+          placeholderTextColor='#999'
           style={styles.input}
           value={name}
           onChangeText={setName}
         />
         <TextInput
           placeholder="Username"
+          placeholderTextColor='#999'
           style={styles.input}
           value={username}
           onChangeText={setUsername}
         />
         <TextInput
           placeholder="Password"
+          placeholderTextColor='#999'
           style={styles.input}
           value={password}
           secureTextEntry
@@ -78,6 +81,7 @@ const RegistrationScreen = ({ navigation }: any) => {
         />
         <TextInput
           placeholder="Phone"
+          placeholderTextColor='#999'
           style={styles.input}
           value={phone}
           onChangeText={setPhone}
@@ -112,6 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 12,
     marginBottom: 15,
+    color: '#000',
   },
   button: {
     backgroundColor: '#007AFF',

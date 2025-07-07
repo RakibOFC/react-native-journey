@@ -4,12 +4,13 @@ import AppSplashScreen from '../screens/AppSplashScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegistrationScreen from '../screens/RegistrationScreen';
 import DashboardScreen from '../screens/DashboardScreen';
+import { Routes } from '../constants/routes';
 
 export type RootStackParamList = {
-    Splash: undefined;
-    Login: undefined;
-    Registration: undefined;
-    Dashboard: undefined;
+  [Routes.Splash]: undefined;
+  [Routes.Login]: undefined;
+  [Routes.Registration]: undefined;
+  [Routes.Dashboard]: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -17,10 +18,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const AppNavigator = () => {
   return (
     <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Splash" component={AppSplashScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Registration" component={RegistrationScreen} />
-      <Stack.Screen name="Dashboard" component={DashboardScreen} />
+      <Stack.Screen name={Routes.Splash} component={AppSplashScreen} />
+      <Stack.Screen name={Routes.Login} component={LoginScreen} />
+      <Stack.Screen name={Routes.Registration} component={RegistrationScreen} />
+      <Stack.Screen name={Routes.Dashboard} component={DashboardScreen} />
     </Stack.Navigator>
   );
 };

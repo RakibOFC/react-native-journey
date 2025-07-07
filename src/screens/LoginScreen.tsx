@@ -3,12 +3,13 @@ import {Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboa
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from '../db/Database';
 import { initDB } from '../db/Database';
+import { Routes } from '../constants/routes';
 
 const LoginScreen = ({ navigation }: any) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
+  useEffect(() => { 
     initDB();
   }, []);
 
@@ -23,7 +24,7 @@ const LoginScreen = ({ navigation }: any) => {
       if (user) {
         await AsyncStorage.setItem('is_logged_in', 'true');
         await AsyncStorage.setItem('user_id', user.id.toString());
-        navigation.replace('Dashboard');
+        navigation.replace(Routes.Dashboard);
       } else {
         Alert.alert('Login Failed', 'Invalid username or password.');
       }
@@ -44,12 +45,14 @@ const LoginScreen = ({ navigation }: any) => {
         />
         <TextInput
           placeholder="Username"
+          placeholderTextColor='#999'
           style={styles.input}
           value={username}
           onChangeText={setUsername}
         />
         <TextInput
           placeholder="Password"
+          placeholderTextColor='#999'
           style={styles.input}
           secureTextEntry
           value={password}
@@ -94,6 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 12,
     marginBottom: 15,
+    color: '#000',
   },
   button: {
     backgroundColor: '#007AFF',
