@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, Image, TextInput, TouchableOpacity, FlatList, ActivityIndicator, Alert } from 'react-native';
+import {
+  View, Text, StyleSheet, StatusBar, Image, TextInput,
+  TouchableOpacity, FlatList, ActivityIndicator, Alert
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserById } from '../db/Database';
 import { Routes } from '../constants/routes';
-
-// Mock API
-const fetchShows = async (query: string): Promise<any[]> => {
-  return new Promise(resolve =>
-    setTimeout(() => resolve([
-      { id: 1, name: `Result for "${query}" 1` },
-      { id: 2, name: `Result for "${query}" 2` },
-      { id: 3, name: `Result for "${query}" 3` },
-    ]), 1000)
-  );
-};
+import { fetchShows } from '../api/apiService';
+import CardTVShow from './CardTVShow';
+import { SearchResult } from '../models/SearchResult';
 
 const DashboardScreen = ({ navigation }: any) => {
   const [userName, setUserName] = useState('Loading...');
   const [searchText, setSearchText] = useState('iron');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -46,12 +41,6 @@ const DashboardScreen = ({ navigation }: any) => {
     await AsyncStorage.removeItem('user_id');
     navigation.replace(Routes.Login);
   };
-
-  const renderItem = ({ item }: { item: any }) => (
-    <View style={styles.card}>
-      <Text style={styles.cardText}>{item.name}</Text>
-    </View>
-  );
 
   return (
     <View style={styles.container}>
@@ -83,10 +72,12 @@ const DashboardScreen = ({ navigation }: any) => {
       {loading ? (
         <ActivityIndicator style={{ marginTop: 40 }} size="large" color="#007AFF" />
       ) : (
-        <FlatList style={styles.list}
+        <FlatList
           data={searchResults}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <CardTVShow index={index} show={item.show} />
+          )}
           contentContainerStyle={{ paddingBottom: 20 }}
         />
       )}
